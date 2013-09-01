@@ -1,15 +1,9 @@
 <?php
 
 namespace Geronimo;
-use Geronimo\Url;
 
-class UrlStrategy {
-    public function __construct()
-    {
-    }
-    
-    public function createFromHref($href, $context)
-    {
+trait UrlResolver {
+    protected function resolvePath($href, $context){
         // Determine what kind of href we got
         $hrefParts = parse_url($href);
         $contextParts = parse_url($context);

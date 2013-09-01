@@ -1,15 +1,13 @@
 <?php
 namespace Geronimo\Processor;
 
-use Geronimo\UrlStrategy;
+use Geronimo\UrlResolver;
 
-class HtmlProcessor implements ProcessorInterface {
-    private $urlStrategy;
-    public function __construct(UrlStrategy $strategy){
-        $this->urlStrategy = $strategy;
-    }
+class HtmlProcessor  implements ProcessorInterface  {
+    use UrlResolver;
     
-    public function process(array $response){
+    public function process(array $response)
+    {
         $start = microtime(true);
         $response["hrefs"] = array();
         $response["scripts"] = array();
@@ -31,18 +29,18 @@ class HtmlProcessor implements ProcessorInterface {
         } else {
             $response["base_url"] = $response["request_uri"];
         }
-
+        // get the links
         $results = $doc->getElementsByTagName("a");
         foreach($results as $result){
             if ($result->hasAttribute("href") && substr($result->getAttribute("href"),0 ,1)!= "#"){
-                $response["anchors"][] = $this->urlStrategy->createFromHref($result->getAttribute("href"), $response["base_url"]);
+                $response["anchors"][] = $this->resolvePath($result->getAttribute("href"), $response["base_url"]);
             }
         }
-        
+        // get the script tags
         $results = $doc->getElementsByTagName("script");
         foreach($results as $result){
             if ($result->hasAttribute("src")){
-                $response["scripts"][] = $this->urlStrategy->createFromHref($result->getAttribute("src"), $response["base_url"]);
+                $response["scripts"][] = $this->resolvePath($result->getAttribute("src"), $response["base_url"]);
             }
         }
         
@@ -53,7 +51,7 @@ class HtmlProcessor implements ProcessorInterface {
                 if (!isset($response["links"][$rel])){
                     $response["links"][$rel] = array();
                 }
-                $response["links"][$rel][] = $this->urlStrategy->createFromHref($result->getAttribute("href"), $response["base_url"]);
+                $response["links"][$rel][] = $this->resolvePath($result->getAttribute("href"), $response["base_url"]);
             }
         }
 
@@ -66,7 +64,7 @@ class HtmlProcessor implements ProcessorInterface {
         $results = $doc->getElementsByTagName("img");
         foreach ($results as $result){
             if ($result->hasAttribute("src")){
-                $response["images"][] = $this->urlStrategy->createFromHref($result->getAttribute("src"), $response["base_url"]);
+                $response["images"][] = $this->resolvePath($result->getAttribute("src"), $response["base_url"]);
             }
         }
         
