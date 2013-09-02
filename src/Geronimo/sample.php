@@ -10,6 +10,10 @@ $url = "http://www.example.com/";
 // create an httpClient... this is what will be used to actually fetch the resource.
 $httpClient = new \Geronimo\Http\FileGetContentsClient();
 
+// Create the Url filter and add a filter rule that keeps crawling on the same domain (and allows subdomains).
+$filter = new \Geronimo\UrlFilter();
+$filter->addFilterRule(new \Geronimo\UrlFilter\SameDomainRule($url, true));
+
 // This creates the component that will take a response array from the
 // FileGetContentsClient and process it and create a Document object
 $documentFactory = new \Geronimo\DocumentFactory();
@@ -23,12 +27,6 @@ $htmlProcessor = new \Geronimo\Processor\HtmlProcessor();
 $documentFactory->addTypeHandler('text/html', $htmlProcessor);
 
 
-// A sample Url Filter function that will work to keep the crawlings down to a single domain.  
-$filter = function($test) use ($url){
-    $ret = strpos($test, parse_url($url, PHP_URL_HOST));
-    return $ret;
-};
-
 // An implementation of the \Geronimo\Crawler Interface that will crawl by doing a request
 // and process in a loop until all links have been exhausted. Part of the loop includes getting
 // links from the document after it has been processed and adding them to the todo list if they
@@ -38,15 +36,12 @@ $crawler = new \Geronimo\Crawler\SequencialCrawler($httpClient, $documentFactory
 
 $results = $crawler->crawl($url);
 
-// After crawling run one or more reports (not yet implemented)
-
-/*$report = new Report\XmlSiteMap();
-$sitemap = $report->run($results);
+// After crawling run one or more reports 
+$report = new \Geronimo\Report\XmlSiteMap();
+$sitemap = $report->runReport($results);
 echo $sitemap;
-*/
 
-print_r($results);
-//print_r($results);
+
 
 
 

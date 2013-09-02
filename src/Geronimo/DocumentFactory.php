@@ -5,10 +5,11 @@ namespace Geronimo;
 class DocumentFactory
 {
     protected $processors = [];
+    protected $finfo;
     
     public function __construct()
     {
-
+        $this->finfo = finfo_open();
     }
     
     public function createDocumentFromResponseArray(array $response){
@@ -54,7 +55,7 @@ class DocumentFactory
         $this->processors[$type] = $processor;
     }
     
-    protected function negotiateContent($request){
-        return "text/html";
+    protected function negotiateContent($request){   
+        return isset($request["header"]["Content-Type"])?$request["header"]["Content-Type"]:finfo_buffer($this->finfo, $request["body"], FILEINFO_MIME_TYPE);
     }
 }

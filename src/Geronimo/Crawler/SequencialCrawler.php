@@ -24,7 +24,9 @@ class SequencialCrawler implements \Geronimo\Crawler
      *  @param \Geronimo\DocumentFactory $documentFactory - component that will create the documents from a request
      *  @param Callable $urlFilter call back that when given a url will return false when the crawler should not crawl
      **/
-    public function __construct(\Geronimo\Http\ClientInterface $httpClient, \Geronimo\DocumentFactory $documentFactory, Callable $urlFilter)
+    public function __construct(\Geronimo\Http\ClientInterface $httpClient,
+                                \Geronimo\DocumentFactory $documentFactory,
+                                \Geronimo\UrlFilter $urlFilter)
     {
         $this->httpClient = $httpClient;
         $this->documentFactory = $documentFactory;
@@ -66,8 +68,8 @@ class SequencialCrawler implements \Geronimo\Crawler
             $requestNo++;
             $url = array_shift($todoList);
              // if the url isnt filtered or previously crawled then fetch it
-            $filter = $this->urlFilter;
-            if ($filter($url) && !in_array($url, $crawledUrls)){
+            
+            if ($this->urlFilter->isAllowed($url) && !in_array($url, $crawledUrls)){
                 $response = $this->httpClient->fetchUrl($url);
                 $document = $this->documentFactory->createDocumentFromResponseArray($response);
                 if(!in_array($document->getCanonicalUrl(), $crawledUrls)){

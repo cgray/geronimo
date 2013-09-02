@@ -4,6 +4,11 @@ namespace Geronimo\Http;
 
 class FileGetContentsClient implements ClientInterface
 {
+    protected $finfo;
+    
+    public function __construct(){
+        $this->finfo = finfo_open();
+    }
     /**
      *  Get a url and process it
      *
@@ -17,7 +22,7 @@ class FileGetContentsClient implements ClientInterface
         $response["request_uri"] = $url;
         $response["body"] = file_get_contents($url);
         // emulate content size header
-        $response["headers"]["content-type"] = "text/html";
+        $response["headers"]["content-type"] = finfo_buffer($this->finfo, $response["body"], FILEINFO_MIME_TYPE);
         $response["headers"]["content-length"] = strlen($response["body"]);
         $end = $response["elapsed_time"] = microtime(true);
         return $response;
@@ -33,7 +38,7 @@ class FileGetContentsClient implements ClientInterface
     {
         $response = array();
         foreach($urls as $url){
-            $response[$url] = $this->getUrl($url);
+            $response[$url] = $this->fetchUrl($url);
         }
         return $response;
     }
