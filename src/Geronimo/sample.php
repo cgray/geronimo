@@ -12,6 +12,9 @@ $httpClient = new \Geronimo\Http\FileGetContentsClient();
 
 // Create the Url filter and add a filter rule that keeps crawling on the same domain (and allows subdomains).
 $filter = new \Geronimo\UrlFilter();
+$sameDomainRule = new \Geronimo\UrlFilter\SameDomainRule($url);
+$sameDomainRule->allowSubdomains(true);
+
 $filter->addFilterRule(new \Geronimo\UrlFilter\SameDomainRule($url, true));
 
 // This creates the component that will take a response array from the
@@ -31,15 +34,16 @@ $documentFactory->addTypeHandler('text/html', $htmlProcessor);
 // and process in a loop until all links have been exhausted. Part of the loop includes getting
 // links from the document after it has been processed and adding them to the todo list if they
 // haven't already been crawled. 
-$crawler = new \Geronimo\Crawler\SequencialCrawler($httpClient, $documentFactory, $filter);
+$crawler = new \Geronimo\Crawler\SequentialCrawler($httpClient, $documentFactory, $filter);
 
 
-$results = $crawler->crawl($url);
+$crawlResults = $crawler->crawl($url);
 
 // After crawling run one or more reports 
 $report = new \Geronimo\Report\XmlSiteMap();
-$sitemap = $report->runReport($results);
-echo $sitemap;
+$report->bindData($crawlResults);
+echo $report->run();
+
 
 
 

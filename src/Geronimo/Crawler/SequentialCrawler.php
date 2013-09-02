@@ -6,7 +6,7 @@ namespace Geronimo\Crawler;
  **/
 
 
-class SequencialCrawler implements \Geronimo\Crawler
+class SequentialCrawler implements \Geronimo\Crawler
 {
 
     protected $httpClient;

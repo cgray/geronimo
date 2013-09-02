@@ -2,5 +2,6 @@
 namespace Geronimo;
 
 interface Report{
-    public function runReport(array $data);
+    public function bindData(array $data);
+    public function run();
 }

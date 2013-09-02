@@ -4,12 +4,15 @@ namespace Geronimo\UrlFilter;
 
 class SameDomainRule implements Rule
 {
-    private $allowSubdomains;
+    private $allowSubdomains = true;
     private $domain; 
-    public function __construct($domain, $allowSubdomains = true)
+    public function __construct($domain)
     {
-        $this->allowSubdomains = $allowSubdomains;
         $this->domain = parse_url($domain, PHP_URL_HOST);
+    }
+    
+    public function allowSubdomains($allowed){
+        $this->allowSubdomains = $allowed;
     }
     public function matches($url)
     {

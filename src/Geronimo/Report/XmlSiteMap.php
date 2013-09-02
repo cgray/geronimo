@@ -2,7 +2,12 @@
 namespace Geronimo\Report;
 
 class XmlSiteMap {
-    public function runReport(array $data){
+    protected $data;
+    public function bindData(&$data){
+        $this->data = $data;
+    }
+    public function run(){
+        $data = $this->data;
         //Ugly ugly over simplified implementation for proof of concept;
         $dom = new \DomDocument("1.0");
         $urlset = $dom->createElementNS("http://www.sitemaps.org/schemas/sitemap/0.9" ,"urlset");
