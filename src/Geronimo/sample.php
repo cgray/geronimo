@@ -42,7 +42,7 @@ $crawlResults = $crawler->crawl($url);
 // After crawling run one or more reports 
 $report = new \Geronimo\Report\XmlSiteMap();
 $report->bindData($crawlResults);
-echo $report->run();
+echo $report->generateReport();
 
 
 

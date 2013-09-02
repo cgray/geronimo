@@ -6,7 +6,7 @@ class XmlSiteMap {
     public function bindData(&$data){
         $this->data = $data;
     }
-    public function run(){
+    public function generateReport(){
         $data = $this->data;
         //Ugly ugly over simplified implementation for proof of concept;
         $dom = new \DomDocument("1.0");
