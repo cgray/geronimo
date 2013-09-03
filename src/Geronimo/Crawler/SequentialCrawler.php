@@ -50,7 +50,10 @@ class SequentialCrawler implements \Geronimo\Crawler
      **/
     protected function processRobots($url)
     {
-        // todo - grab robots.txt and add to url filters where appropriate
+        /*$urlParts = parse_url($url);
+        $robots = $this->httpClient->fetchUrl('http://'.$urlParts['host']."/robots.txt");
+        $robot_lines = explode("\n", $robots["body"]);
+        */
     }
     
     /**
@@ -113,5 +116,4 @@ class SequentialCrawler implements \Geronimo\Crawler
             }
         }
     }
-
 }
