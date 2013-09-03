@@ -17,10 +17,18 @@ class FileGetContentsClient implements ClientInterface
      **/
     public function fetchUrl($url)
     {
+       
         $response = array();
         $start = microtime(true);
         $response["request_uri"] = $url;
-        $response["body"] = file_get_contents($url);
+        $headers = get_headers($url);
+        $response["status_code"] = substr($headers[0], 9,3);
+        if ($response["status_code"] == 200){
+            $response["body"] = @file_get_contents($url);
+        } else {
+            $response["body"] = false;
+        }
+
         // emulate content size header
         $response["headers"]["content-type"] = finfo_buffer($this->finfo, $response["body"], FILEINFO_MIME_TYPE);
         $response["headers"]["content-length"] = strlen($response["body"]);
