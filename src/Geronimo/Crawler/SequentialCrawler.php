@@ -6,56 +6,11 @@ namespace Geronimo\Crawler;
  **/
 
 
-class SequentialCrawler implements \Geronimo\Crawler
+class SequentialCrawler extends \Geronimo\Crawler\AbstractCrawler implements \Geronimo\Crawler
 {
-
-    protected $httpClient;
-    protected $documentFactory;
-    protected $urlFilter;
-    protected $crawlStyleSheets = true;
-    protected $crawlScripts = true;
-    protected $crawlImages = true;
-    protected $crawlAnchors = true;
-    protected $retainDocumentBody = false;
-    protected $maxRequests = 5000;
-    
-    /**
-     *  @param \Geronimo\Http\ClientInterface $httpClient - component that will fetch the resource from the web.
-     *  @param \Geronimo\DocumentFactory $documentFactory - component that will create the documents from a request
-     *  @param Callable $urlFilter call back that when given a url will return false when the crawler should not crawl
-     **/
-    public function __construct(\Geronimo\Http\ClientInterface $httpClient,
-                                \Geronimo\DocumentFactory $documentFactory,
-                                \Geronimo\UrlFilter $urlFilter)
-    {
-        $this->httpClient = $httpClient;
-        $this->documentFactory = $documentFactory;
-        $this->urlFilter = $urlFilter;
-    }
-    
-    /**
-     * @param string $url Url to start crawling from
-     * @return array[/Geronimo/Document] The results of the crawl.
-     **/
-    public function crawl($url)
-    {
-        // clear any outstanding list and kick off the crawl
-        $this->processRobots($url);
-        return $this->doCrawl($url);
-    }
-    
-    /**
-     * @param string $url
-     * @todo Implement this
-     **/
-    protected function processRobots($url)
-    {
-        /*$urlParts = parse_url($url);
-        $robots = $this->httpClient->fetchUrl('http://'.$urlParts['host']."/robots.txt");
-        $robot_lines = explode("\n", $robots["body"]);
-        */
-    }
-    
+    public $maxRequests = 5000;
+    public $cooldown = 100;
+        
     /**
      * Do the actual crawling
      *
@@ -71,7 +26,10 @@ class SequentialCrawler implements \Geronimo\Crawler
             $requestNo++;
             $url = array_shift($todoList);
              // if the url isnt filtered or previously crawled then fetch it
-            
+            $hashPos = strpos($url, "#");
+            if ($hashPos != FALSE){
+                $url = substr($url, 0 , $hashPos);
+            }
             if ($this->urlFilter->isAllowed($url) && !in_array($url, $crawledUrls)){
                 $response = $this->httpClient->fetchUrl($url);
                 $document = $this->documentFactory->createDocumentFromResponseArray($response);

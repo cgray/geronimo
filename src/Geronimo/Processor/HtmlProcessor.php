@@ -36,7 +36,7 @@ class HtmlProcessor  implements ProcessorInterface  {
                 $response["anchors"][] = $this->resolvePath($result->getAttribute("href"), $response["base_url"]);
             }
         }
-        // get the script tags
+       
         $results = $doc->getElementsByTagName("script");
         foreach($results as $result){
             if ($result->hasAttribute("src")){

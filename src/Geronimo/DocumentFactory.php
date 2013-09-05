@@ -18,6 +18,7 @@ class DocumentFactory
             $p = $this->processors[$contentType];
             $response = call_user_func([$p, "process"], $response);
         }
+
         $document = new Document;
         $document->setUrl($response["request_uri"]);
         $document->setBody($response["body"]);
@@ -48,6 +49,7 @@ class DocumentFactory
                 $document->addScript($v);
             }
         }
+
         return $document;
     }
     

@@ -25,7 +25,11 @@ trait UrlResolver {
                 $pathComponents = explode("/", trim(dirname($contextParts["path"]), "/"));
             }
             $pathComponents = array_filter($pathComponents);
-            $relComponents  = explode("/", trim($hrefParts["path"], "/"));
+            if (isset($hrefParts["path"])){
+                $relComponents  = explode("/", trim($hrefParts["path"], "/"));
+             } else {
+                $relComponents = [];
+             }
             foreach ($relComponents as $dir){
                 if ($dir !== null){
                     if ($dir == ".."){

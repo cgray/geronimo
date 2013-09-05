@@ -10,6 +10,7 @@ class XmlSiteMap {
         $data = $this->data;
         //Ugly ugly over simplified implementation for proof of concept;
         $dom = new \DomDocument("1.0");
+        $dom->formatOutput = true;
         $urlset = $dom->createElementNS("http://www.sitemaps.org/schemas/sitemap/0.9" ,"urlset");
         foreach($data as $node){
             if ($node->getHeader("Content-Type", "text/html") == "text/html"){

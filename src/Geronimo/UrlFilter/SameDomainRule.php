@@ -17,9 +17,11 @@ class SameDomainRule implements Rule
     public function matches($url)
     {
         if (!$this->allowSubdomains){
+            // Hosts must match exactly
             return $this->domain === parse_url($url, PHP_URL_HOST);
         } else {
-            return preg_match('#'.addslashes($this->domain).'$#', parse_url($url, PHP_URL_HOST));
+            
+            return preg_match('#'.preg_quote($this->domain).'$#', parse_url($url, PHP_URL_HOST));
         }
     }
 }
