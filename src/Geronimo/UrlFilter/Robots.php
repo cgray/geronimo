@@ -14,7 +14,6 @@ class Robots implements \Geronimo\UrlFilter\Rule {
 
             $line = trim($line);
             // ignore comments
-            
             if ($line && substr($line, 0,1) != "#"){
                 $key = $value = "";
                 list ($key, $value)  = explode(":", $line);
@@ -39,7 +38,6 @@ class Robots implements \Geronimo\UrlFilter\Rule {
                     break;
                 case "user-agent":
                     if (strpos(strtolower($rule["value"]), strtolower($this->userAgent)) !== FALSE || $rule["value"] == "*"){
-                        echo "UA ".$this->userAgent." Matches ".$rule["value"],"\n";
                         $rulesApply= true;
                     } else {
                         $rulesApply = false;
