@@ -53,7 +53,7 @@ class DocumentFactory
         return $document;
     }
     
-    public function addTypeHandler($type, Processor\ProcessorInterface $processor){
+    public function addTypeHandler($type, Processor $processor){
         $this->processors[$type] = $processor;
     }
     

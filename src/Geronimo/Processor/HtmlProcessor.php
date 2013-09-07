@@ -3,7 +3,7 @@ namespace Geronimo\Processor;
 
 use Geronimo\UrlResolver;
 
-class HtmlProcessor  implements ProcessorInterface  {
+class HtmlProcessor  implements \Geronimo\Processor  {
     use UrlResolver;
     
     public function process(array $response)

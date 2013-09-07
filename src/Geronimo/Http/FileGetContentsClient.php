@@ -2,7 +2,7 @@
 
 namespace Geronimo\Http;
 
-class FileGetContentsClient implements ClientInterface
+class FileGetContentsClient implements Client
 {
     protected $finfo;
     

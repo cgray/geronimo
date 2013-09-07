@@ -14,6 +14,7 @@ class Robots implements \Geronimo\UrlFilter\Rule {
 
             $line = trim($line);
             // ignore comments
+            
             if ($line && substr($line, 0,1) != "#"){
                 $key = $value = "";
                 list ($key, $value)  = explode(":", $line);
@@ -26,6 +27,7 @@ class Robots implements \Geronimo\UrlFilter\Rule {
         
         $urlParts = parse_url($url);
         $rulesApply = false;
+        $lastDirective = "";
         foreach($this->rules as $rule){
             switch($rule["type"]){
                 case "allow":
@@ -40,13 +42,17 @@ class Robots implements \Geronimo\UrlFilter\Rule {
                     if (strpos(strtolower($rule["value"]), strtolower($this->userAgent)) !== FALSE || $rule["value"] == "*"){
                         $rulesApply= true;
                     } else {
-                        $rulesApply = false;
+                        // Allow multiple concurrent user agent definition without resetting context. 
+                        if ($lastDirective != "user-agent"){
+                            $rulesApply = false;
+                        }
                     }
                     break;
                 case "sitemap":
                     //@not yet supported
                     break;
             }
+            $lastDirective = $rule["type"];
         }
 
         return true;
