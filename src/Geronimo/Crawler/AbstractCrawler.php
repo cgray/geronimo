@@ -6,6 +6,7 @@ abstract class AbstractCrawler {
     protected $httpClient;
     protected $documentFactory;
     protected $urlFilter;
+    public $useRobotsFile = true;
     public $crawlStyleSheets = false;
     public $crawlScripts = false;
     public $crawlImages = false;
@@ -48,7 +49,9 @@ abstract class AbstractCrawler {
     public function crawl($url)
     {
         // clear any outstanding list and kick off the crawl
-        $this->processRobots($url);
+        if ($this->useRobotsFile){
+            $this->processRobots($url);
+        }
         return $this->doCrawl($url);
     }
     
