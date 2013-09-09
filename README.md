@@ -3,6 +3,10 @@ Geronimo!
 
 Web Crawler / Site Analyzer / Sitemap Generator
 
+## Requirements
+
+* PHP 5.4+
+* fileinfo  - (windows users may have to enable the php_fileinfo.dll in php.ini)
 
 ## Installation
 
