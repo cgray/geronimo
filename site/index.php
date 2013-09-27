@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["url"])){
                 <legend>
                     Select Url to Crawl:
                 </legend>
-                <input type='text' name='url' placeholder='http://www.example.com' value='<?= isset($_POST["url"])?$_POST["url"]:"" ?>'/>
+                  <input type='url' name='url' placeholder='http://www.example.com' value='<?= isset($_POST["url"])?$_POST["url"]:"" ?>' required/>
                 <input type='submit' value='Crawl'/>
             </fieldset>
         </form>
