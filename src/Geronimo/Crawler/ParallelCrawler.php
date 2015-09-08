@@ -2,7 +2,7 @@
 
 namespace Geronimo\Crawler;
 /**
- * Implements a Syncronous Strategry for Crawling a website.
+ * Implements an asyncronous strategry for Crawling a website.
  **/
 
 
